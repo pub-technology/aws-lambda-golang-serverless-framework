@@ -1,1 +1,1 @@
-# aws-lambda-golang-serverless-framework
+### Sample API : AWS Lambda Golang Serverless Framework
