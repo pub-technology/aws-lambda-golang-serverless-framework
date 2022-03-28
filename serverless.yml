@@ -9,6 +9,7 @@ provider:
   stage: ${opt:stage, 'prototype'}
   stackName: golang-serverless-offline
   timeout: 900
+  region: ${env:AWS_REGION, 'us-west-2'}
   environment:
     region: ${env:AWS_REGION, 'us-west-2'}
     DISABLE_XRAY_TRACING: 1
