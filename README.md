@@ -1,15 +1,18 @@
-### Sample API : AWS Lambda Golang Serverless Framework
+### Sample REST API : AWS Lambda Golang With Serverless Framework
 
+#### This is simple REST API with Golang
+ - Get a product
+ - Get all product
+ - Create a product
+ - Delete a product
 
-# Install the latest release:
-https://github.com/go-delve/delve/tree/master/Documentation/installation
-$ go install github.com/go-delve/delve/cmd/dlv@latest
-
-```js
-dlv version
-
-Delve Debugger
-Version: 1.8.2
-Build: $Id: dbb493ec14d1e7753504d016b1e1ef1665b75b16 $
-
+```css
+┌───────────────────────────────────────────────────────────────────────────────────┐
+│                                                                                   │
+│   GET    | https://domain/stage/product/{id}                           │
+│   GET    | https://domain/stage/products                               │
+│   PUT    | https://domain/stage/product                                │
+│   DELETE | https://domain/stage/product                                │
+│                                                                                   │
+└───────────────────────────────────────────────────────────────────────────────────┘
 ```
