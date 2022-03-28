@@ -5,8 +5,9 @@
     "author": "",
     "license": "MIT",
     "scripts": {
-        "start": "sam local start-api",
+        "start": "sam local start-api --env-vars env.json",
         "watch": "nodemon --watch ./ -e go,js --exec make build",
+        "local-invoke": "sam local invoke ListToDoFunctions -e event.json",
         "debug": "npm-run-all --parallel start watch",
         "offline": "serverless offline",
         "start-with-docker": "node ./node_modules/.bin/serverless offline start --useDocker"

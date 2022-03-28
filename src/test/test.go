@@ -7,7 +7,7 @@ import (
 
 func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	//Returning response with AWS Lambda Proxy Response
-	return events.APIGatewayProxyResponse{Body: string("test 2123"), StatusCode: 200}, nil
+	return events.APIGatewayProxyResponse{Body: string("Hello world"), StatusCode: 200}, nil
 }
 
 func main() {

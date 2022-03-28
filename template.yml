@@ -16,6 +16,9 @@ Resources:
   ListToDoFunctions:
     Type: AWS::Serverless::Function
     Properties:
+      Environment:
+        Variables:
+          DYNAMODB_TABLE: "test-development"
       Handler: bin/list
       Runtime: go1.x
       Events:
