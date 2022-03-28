@@ -1,0 +1,74 @@
+app: aws-lambda-golang-serverless-framework
+service: aws-lambda-golang-serverless-framework
+
+frameworkVersion: ">=2.24.0"
+
+provider:
+  name: aws
+  runtime: go1.x
+  stage: ${opt:stage, 'prototype'}
+  stackName: golang-serverless-offline
+  timeout: 900
+  environment:
+    region: ${env:AWS_REGION, 'us-west-2'}
+    DISABLE_XRAY_TRACING: 1
+    AWS_XRAY_CONTEXT_MISSING: LOG_ERROR
+    _X_AMZN_TRACE_ID: 0
+    AWS_XRAY_LOG_LEVEL: silent #https://github.com/dherault/serverless-offline/issues/327
+    GLOBAL_DYNAMODB_TABLE: ${env:GLOBAL_DYNAMODB_TABLE, 'global-product-development'}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource:
+        - ${env:GLOBAL_DYNAMODB_TABLE_ARN}
+        - ${env:GLOBAL_DYNAMODB_TABLE_ARN}/index/*
+
+package:
+  exclude:
+    - ./**
+  include:
+    - ./bin/**
+
+functions:
+  productGet:
+    handler: bin/product/get
+    events:
+      - http:
+          path: product/{id}
+          method: get
+          cors: true
+          request:
+            parameters:
+              paths:
+                id: true
+  productGetAll:
+    handler: bin/product/getAll
+    events:
+      - http:
+          path: products
+          method: get
+          cors: true
+  productPut:
+    handler: bin/product/put
+    package:
+      include:
+        - ./bin/list
+    events:
+      - http:
+          path: product
+          method: put
+          cors: true
+  productDelete:
+    handler: bin/product/delete
+    events:
+      - http:
+          path: product
+          method: delete
+          cors: true
+

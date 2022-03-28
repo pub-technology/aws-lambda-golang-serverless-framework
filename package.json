@@ -1,0 +1,7 @@
+{
+    "name": "aws-lambda-golang-serverless-framework",
+    "version": "1.0.0",
+    "description": "Simple REST API with golang",
+    "author": "haithai",
+    "license": "MIT"
+}
