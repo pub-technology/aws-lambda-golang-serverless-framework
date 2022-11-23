@@ -1,1 +1,2 @@
-### Sample API : AWS Lambda Golang Serverless Framework
+### Sample REST API : AWS Lambda Golang With Serverless Framework
+

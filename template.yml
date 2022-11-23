@@ -2,25 +2,28 @@ AWSTemplateFormatVersion : '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: AWS Lambda Golang serverless framework
 Resources:
-  TestToDoFunctions:
+  ProductGetFunctions:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: bin/test
+      Handler: bin/product/get
       Runtime: go1.x
       Events:
         list:
           Type: Api
           Properties:
-            Path: /test
+            Path: /product
             Method: get
-  ListToDoFunctions:
+  ProductGetAllFunctions:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: bin/list
+      Environment:
+        Variables:
+          DYNAMODB_TABLE: "test-development"
+      Handler: bin/product/getAll
       Runtime: go1.x
       Events:
         list:
           Type: Api
           Properties:
-            Path: /list
+            Path: /products
             Method: get

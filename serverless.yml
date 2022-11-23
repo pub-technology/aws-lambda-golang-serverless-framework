@@ -9,25 +9,24 @@ provider:
   stage: ${opt:stage, 'prototype'}
   stackName: golang-serverless-offline
   timeout: 900
+  region: ${env:AWS_REGION, 'us-west-2'}
   environment:
     region: ${env:AWS_REGION, 'us-west-2'}
     DISABLE_XRAY_TRACING: 1
     AWS_XRAY_CONTEXT_MISSING: LOG_ERROR
     _X_AMZN_TRACE_ID: 0
     AWS_XRAY_LOG_LEVEL: silent #https://github.com/dherault/serverless-offline/issues/327
-    DYNAMODB_TABLE: test-development
-  iam:
-    role:
-      statements:
-        - Effect: Allow
-          Action:
-            - dynamodb:Query
-            - dynamodb:Scan
-            - dynamodb:GetItem
-            - dynamodb:PutItem
-            - dynamodb:UpdateItem
-            - dynamodb:DeleteItem
-          Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${env:DYNAMODB_TABLE}"
+    GLOBAL_DYNAMODB_TABLE: "test-development"
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: "arn:aws:dynamodb:us-west-2:000000000000:table/test-development"
 
 plugins:
   - serverless-offline
@@ -49,43 +48,39 @@ package:
     - ./bin/**
 
 functions:
-  test:
-    handler: bin/test
-    package:
-      include:
-        - ./bin/test
+  productGet:
+    handler: bin/product/get
     events:
       - http:
-          path: test
+          path: product/{id}
           method: get
           cors: true
-
-  list:
-    handler: bin/list
+          request:
+            parameters:
+              paths:
+                id: true
+  productGetAll:
+    handler: bin/product/getAll
+    events:
+      - http:
+          path: products
+          method: get
+          cors: true
+  productPut:
+    handler: bin/product/put
     package:
       include:
         - ./bin/list
     events:
       - http:
-          path: list
-          method: get
+          path: product
+          method: put
+          cors: true
+  productDelete:
+    handler: bin/product/delete
+    events:
+      - http:
+          path: product
+          method: delete
           cors: true
 
-resources:
-  Resources:
-    TodosDynamoDbTable:
-      Type: 'AWS::DynamoDB::Table'
-      DeletionPolicy: Retain
-      Properties:
-        AttributeDefinitions:
-          -
-            AttributeName: id
-            AttributeType: S
-        KeySchema:
-          -
-            AttributeName: id
-            KeyType: HASH
-        ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
-        TableName: ${env:DYNAMODB_TABLE}
